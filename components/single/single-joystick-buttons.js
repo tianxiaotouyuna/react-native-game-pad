@@ -117,6 +117,8 @@ export class RNGamePadSingle extends React.Component {
       buttonAColor,
       onButtonAPress,
       buttonBColor,
+      leftInset,
+      bottomInset,
       containerStyle
     } = this.props;
     console.log("PROPS", this.props);
@@ -126,8 +128,8 @@ export class RNGamePadSingle extends React.Component {
       mode: "static",
       size,
       position: {
-        left: size / 2,
-        bottom: size / 2
+        left: size / 2+leftInset,
+        bottom: size / 2+bottomInset
       },
       lockX,
       lockY
