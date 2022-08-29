@@ -128,8 +128,8 @@ export class RNGamePadSingle extends React.Component {
       mode: "static",
       size,
       position: {
-        left: size / 2+leftInset,
-        bottom: size / 2+bottomInset
+        left: size / 2+leftInset*2,
+        bottom: size / 2+bottomInset*2
       },
       lockX,
       lockY
