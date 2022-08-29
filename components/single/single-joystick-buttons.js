@@ -1,7 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { WebView } from "react-native-webview";
-
 const js = options => {
   console.log("OPTIONS", options);
   let string = `
@@ -17,7 +16,7 @@ const js = options => {
       size: ${options.size},
       position: {
         left: "${options.position.left}",
-        top: "${options.position.top}"
+        bottom: "${options.position.bottom}"
       }
     });
 
@@ -108,8 +107,8 @@ export class RNGamePadSingle extends React.Component {
 
   render() {
     let {
-      color = "green",
-      size = 200,
+      color,
+      size,
       lockX = false,
       lockY = false
     } = this.props.options;
@@ -117,69 +116,31 @@ export class RNGamePadSingle extends React.Component {
       onButtonBPress,
       buttonAColor,
       onButtonAPress,
-      buttonBColor
+      buttonBColor,
+      containerStyle
     } = this.props;
     console.log("PROPS", this.props);
 
     var options = {
-      color: color,
+      color,
       mode: "static",
       size,
       position: {
-        left: "50%",
-        top: "50%"
+        left: size / 2,
+        bottom: size / 2
       },
       lockX,
       lockY
     };
     return (
-      <View style={{ flex: 1, flexDirection: "row" }}>
-        <View style={{ flex: 1 }}>
-          <WebView
-            source={require("./web/index.html")}
-            onMessage={evt => this.invokeCallback(evt.nativeEvent.data)}
-            injectedJavaScript={js(options)}
-          />
-        </View>
-        <View style={{ flex: 1, backgroundColor: "white" }}>
-          <View
-            style={{
-              flexDirection: "row",
-              height: "100%"
-            }}
-          >
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                marginLeft: 50
-              }}
-            >
-              <TouchableOpacity
-                style={[styles.button, { backgroundColor: `${buttonAColor}` }]}
-                onPress={() => onButtonAPress()}
-              >
-                <Text style={styles.buttonText}>A</Text>
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                marginRight: 50
-              }}
-            >
-              <TouchableOpacity
-                style={[styles.button, { backgroundColor: `${buttonBColor}` }]}
-                onPress={() => onButtonBPress()}
-              >
-                <Text style={styles.buttonText}>B</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
+      <View style={[{ flexDirection: "row", width: size / 2, height: size / 2 }, containerStyle]}>
+        <WebView 
+          style={{backgroundColor:'rgba(52, 52, 52, 0.0)'}}
+        originWhitelist={['*']}         
+        source={Platform.OS=='ios'?{uri:'Static.bundle/index.html' }:{uri:'file:///android_asset/test.html'}}  
+        onMessage={evt => this.invokeCallback(evt.nativeEvent.data)}             
+        injectedJavaScript={js(options)}      
+             />
       </View>
     );
   }
